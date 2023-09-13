@@ -22,6 +22,19 @@ namespace ProductApps
             totalChargeTextBlock.Text = totalCharge.ToString("C2");
         }
 
+        private decimal UpdateWrapCharge(decimal totalPayment)
+        {
+            decimal wrapCharge = totalPayment + 25.00m + 5.00m; // TotalPayment + $25.00 + $5.00
+            wrapChargeTextBox.Text = wrapCharge.ToString("C2");
+            return wrapCharge;
+        }
+
+        private void UpdateGSTCharge(decimal totalWithWrap)
+        {
+            decimal gstCharge = totalWithWrap * 0.10m; // 10% of totalWithWrap
+            gstChargeTextBox.Text = gstCharge.ToString("C2");
+        }
+
         private void calculateButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -33,8 +46,11 @@ namespace ProductApps
                 // Calculate and display the total charge
                 CalculateTotalCharge(totalChargeTextBox, cProduct.TotalPayment);
 
-                // Calculate and display the wrap charge
-                UpdateWrapCharge(cProduct.TotalPayment);
+                // Calculate and display the wrap charge and get the total with wrap
+                decimal totalWithWrap = UpdateWrapCharge(cProduct.TotalPayment);
+
+                // Calculate and display the GST charge on the total with wrap
+                UpdateGSTCharge(totalWithWrap);
             }
             catch (FormatException)
             {
@@ -49,18 +65,13 @@ namespace ProductApps
             quantityTextBox.Text = "";
             totalPaymentTextBlock.Text = "";
             totalChargeTextBox.Text = "";
-            wrapChargeTextBox.Text = ""; // Clear the wrapChargeTextBox as well
+            wrapChargeTextBox.Text = "";
+            gstChargeTextBox.Text = ""; // Clear the gstChargeTextBox as well
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void UpdateWrapCharge(decimal totalPayment)
-        {
-            decimal wrapCharge = totalPayment + 25.00m + 5.00m; // TotalPayment + $25.00 + $5.00
-            wrapChargeTextBox.Text = wrapCharge.ToString("C2");
         }
 
         // This method will be triggered when the text in wrapChargeTextBox changes
